@@ -24,8 +24,8 @@ namespace PasswordHelper.Menus
                 new Option("Изменить логин", () => ChangeLogin(Program.apps)),
                 new Option("Изменить пароль", () => ChangePassword(Program.apps)),
                 new Option("Добавить новое приложение", () => AddNewApp(Program.apps)),
-                new Option("Импорт приложений", () => Environment.Exit(0)),
-                new Option("Экспорт приложений", () => Environment.Exit(0)),
+                new Option("Импорт приложений", () => ImportApps(Program.apps)),
+                new Option("Экспорт приложений", () => ExportApps(Program.apps)),
                 new Option("Выход", () => Environment.Exit(0))
             };
         }
@@ -85,6 +85,7 @@ namespace PasswordHelper.Menus
             apps[option - 1] = new App(apps[option - 1].AppName, newLogin, apps[option - 1].Password);
 
             Clipboard.SetText(apps[option - 1].Login);
+            App.Save(Program.saveFileName, apps);
         }
 
         private void ChangePassword(List<App> apps)
@@ -102,6 +103,7 @@ namespace PasswordHelper.Menus
             apps[option - 1] = new App(apps[option - 1].AppName, apps[option - 1].Login, newPassword);
 
             Clipboard.SetText(apps[option - 1].Password);
+            App.Save(Program.saveFileName, apps);
         }
 
         private void AddNewApp(List<App> apps)
@@ -118,6 +120,25 @@ namespace PasswordHelper.Menus
             string password = Console.ReadLine();
 
             apps.Add(new App(appName, login, password));
+            App.Save(Program.saveFileName, apps);
+        }
+
+        private void ImportApps(List<App> apps)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text documents (.txt)|*.txt";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                Program.apps = App.Load(openFileDialog.FileName);
+        }
+
+        private void ExportApps(List<App> apps)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text documents (.txt)|*.txt";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                App.Save(openFileDialog.FileName, apps);
         }
     }
 }
