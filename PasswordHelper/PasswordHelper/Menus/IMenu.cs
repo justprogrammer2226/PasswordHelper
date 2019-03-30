@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace PasswordHelper
 {
-    interface IMenu
+    internal interface IMenu
     {
         string Title { get; }
         List<Option> Options { get; }

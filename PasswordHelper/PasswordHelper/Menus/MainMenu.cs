@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Windows.Forms;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordHelper.Menus
 {
@@ -46,11 +44,7 @@ namespace PasswordHelper.Menus
 
         private void CopyLogin(List<App> apps)
         {
-            Console.Clear();
-            Console.WriteLine("Введите номер приложения, логин которого нужно скопировать.");
-
-            for (int i = 0; i < apps.Count; i++)
-                Console.WriteLine($"{i + 1}. {apps[i].AppName}");
+            OutputApps(apps, "Введите номер приложения, логин которого нужно скопировать.");
 
             int option = int.Parse(Console.ReadLine());
 
@@ -59,11 +53,7 @@ namespace PasswordHelper.Menus
 
         private void CopyPassword(List<App> apps)
         {
-            Console.Clear();
-            Console.WriteLine("Введите номер приложения, пароль которого нужно скопировать.");
-
-            for (int i = 0; i < apps.Count; i++)
-                Console.WriteLine($"{i + 1}. {apps[i].AppName}");
+            OutputApps(apps, "Введите номер приложения, пароль которого нужно скопировать.");
 
             int option = int.Parse(Console.ReadLine());
 
@@ -72,11 +62,7 @@ namespace PasswordHelper.Menus
 
         private void ChangeLogin(List<App> apps)
         {
-            Console.Clear();
-            Console.WriteLine("Введите номер приложения, логин которого нужно изменить.");
-
-            for (int i = 0; i < apps.Count; i++)
-                Console.WriteLine($"{i + 1}. {apps[i].AppName}");
+            OutputApps(apps, "Введите номер приложения, логин которого нужно изменить.");
 
             int option = int.Parse(Console.ReadLine());
             Console.WriteLine($"Введите новый логин для {apps[option - 1].AppName}.");
@@ -90,11 +76,7 @@ namespace PasswordHelper.Menus
 
         private void ChangePassword(List<App> apps)
         {
-            Console.Clear();
-            Console.WriteLine("Введите номер приложения, пароль которого нужно изменить.");
-
-            for (int i = 0; i < apps.Count; i++)
-                Console.WriteLine($"{i + 1}. {apps[i].AppName}");
+            OutputApps(apps, "Введите номер приложения, пароль которого нужно изменить.");
 
             int option = int.Parse(Console.ReadLine());
             Console.WriteLine($"Введите новый пароль для {apps[option - 1].AppName}.");
@@ -129,7 +111,33 @@ namespace PasswordHelper.Menus
             openFileDialog.Filter = "Text documents (.txt)|*.txt";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                Program.apps = App.Load(openFileDialog.FileName);
+            {
+                int option;
+                while(true)
+                {
+                    Console.Clear();
+                    Console.WriteLine("При импорте другого файла, исходный файл будет удалён, вы дейсвительно хотите импортировать новый файл?");
+                    Console.WriteLine("1. Да");
+                    Console.WriteLine("2. Нет");
+
+                    option = int.Parse(Console.ReadLine());
+
+                    if (option == 1)
+                    {
+                        StreamReader sr = new StreamReader(openFileDialog.FileName);
+                        StreamWriter sw = new StreamWriter(new FileStream(Program.saveFileName, FileMode.OpenOrCreate));
+
+                        sw.Write(sr.ReadToEnd());
+                        sr.Close();
+                        sw.Close();
+
+                        break;
+                    }
+                    else if (option == 2) break;
+
+                    Program.apps = App.Load(Program.saveFileName);
+                }
+            }
         }
 
         private void ExportApps(List<App> apps)
@@ -139,6 +147,15 @@ namespace PasswordHelper.Menus
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
                 App.Save(openFileDialog.FileName, apps);
+        }
+
+        private void OutputApps(List<App> apps, string title = null)
+        {
+            Console.Clear();
+            if(title != null) Console.WriteLine(title);
+
+            for (int i = 0; i < apps.Count; i++)
+                Console.WriteLine($"{i + 1}. {apps[i].AppName}");
         }
     }
 }
