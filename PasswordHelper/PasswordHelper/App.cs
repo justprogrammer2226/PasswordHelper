@@ -18,19 +18,22 @@ namespace PasswordHelper
 
         public static void Save(string path, List<App> apps)
         {
-            StreamWriter writer = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate));
+            FileStream fs = new FileStream(path, FileMode.OpenOrCreate);
+            StreamWriter writer = new StreamWriter(fs);
 
             for(int i = 0; i < apps.Count; i++)
                 writer.WriteLine($"{apps[i].AppName}-{apps[i].Login}-{apps[i].Password}");
 
             writer.Close();
+            fs.Close();
         }
 
         public static List<App> Load(string path)
         {
             List<App> apps = new List<App>();
 
-            StreamReader reader = new StreamReader(new FileStream(path, FileMode.Open));
+            FileStream fs = new FileStream(path, FileMode.Open);
+            StreamReader reader = new StreamReader(fs);
 
             while(!reader.EndOfStream)
             {
@@ -41,6 +44,8 @@ namespace PasswordHelper
             }
 
             reader.Close();
+            fs.Close();
+
             return apps;
         }
     }
