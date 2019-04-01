@@ -5,6 +5,7 @@ using PasswordHelper.Menus;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Threading;
 
 namespace PasswordHelper
 {
@@ -53,6 +54,7 @@ namespace PasswordHelper
                         SetForegroundWindow(processes[0].MainWindowHandle);
                     }
                 }
+                Thread.Sleep(40);
             }
         }
 

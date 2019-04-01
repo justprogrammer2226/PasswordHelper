@@ -22,6 +22,7 @@ namespace PasswordHelper.Menus
                 new Option("Изменить логин", () => ChangeLogin(Program.apps)),
                 new Option("Изменить пароль", () => ChangePassword(Program.apps)),
                 new Option("Добавить новое приложение", () => AddNewApp(Program.apps)),
+                new Option("Удалить приложение", () => DeleteApp(Program.apps)),
                 new Option("Импорт приложений", () => ImportApps(Program.apps)),
                 new Option("Экспорт приложений", () => ExportApps(Program.apps)),
                 new Option("Выход", () => Environment.Exit(0))
@@ -153,6 +154,39 @@ namespace PasswordHelper.Menus
 
             apps.Add(new App(appName, login, password));
             App.Save(Program.saveFileName, apps);
+        }
+
+        private void DeleteApp(List<App> apps)
+        {
+            while (true)
+            {
+                OutputApps(apps, "Введите номер приложения, которое нужно удалить.");
+
+                if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= apps.Count)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Вы уверены, что хотите удалить логин и пароль для {apps[indexSelectedOption - 1].AppName}?");
+                    Console.WriteLine($"1. Да.");
+                    Console.WriteLine($"2. Нет.");
+
+                    int indexApp = indexSelectedOption - 1;
+
+                    if (int.TryParse(Console.ReadLine(), out indexSelectedOption) && indexSelectedOption == 1)
+                    {
+                        apps.RemoveAt(indexApp);
+                        App.Save(Program.saveFileName, apps);
+                    }
+                    else if (indexSelectedOption == 2)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Данной опции не существует.");
+                    Console.ReadKey();
+                }
+            }
         }
 
         private void ImportApps(List<App> apps)

@@ -25,7 +25,6 @@ namespace PasswordHelper
                 writer.WriteLine($"{apps[i].AppName}-{apps[i].Login}-{apps[i].Password}");
 
             writer.Close();
-            fs.Close();
         }
 
         public static List<App> Load(string path)
