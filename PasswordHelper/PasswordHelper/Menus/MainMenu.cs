@@ -37,55 +37,105 @@ namespace PasswordHelper.Menus
             for (int i = 0; i < Options.Count; i++)
                 Console.WriteLine($"{i + 1}. {Options[i].Name}");
 
-            int selectedOption = int.Parse(Console.ReadLine());
-
-            Options[selectedOption - 1].Action();
+            if(int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= Options.Count)
+            {
+                Options[indexSelectedOption - 1].Action();
+            }
+            else
+            {
+                Console.WriteLine("Данной опции не существует.");
+                Console.ReadKey();
+            }
         }
 
         private void CopyLogin(List<App> apps)
         {
-            OutputApps(apps, "Введите номер приложения, логин которого нужно скопировать.");
+            while(true)
+            {
+                OutputApps(apps, "Введите номер приложения, логин которого нужно скопировать.");
 
-            int option = int.Parse(Console.ReadLine());
-
-            Clipboard.SetText(apps[option - 1].Login);
+                if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= apps.Count)
+                {
+                    Clipboard.SetText(apps[indexSelectedOption - 1].Login);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Данной опции не существует.");
+                    Console.ReadKey();
+                }
+            }
         }
 
         private void CopyPassword(List<App> apps)
         {
-            OutputApps(apps, "Введите номер приложения, пароль которого нужно скопировать.");
+            while (true)
+            {
+                OutputApps(apps, "Введите номер приложения, пароль которого нужно скопировать.");
 
-            int option = int.Parse(Console.ReadLine());
-
-            Clipboard.SetText(apps[option - 1].Password);
+                if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= apps.Count)
+                {
+                    Clipboard.SetText(apps[indexSelectedOption - 1].Password);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Данной опции не существует.");
+                    Console.ReadKey();
+                }
+            }
         }
 
         private void ChangeLogin(List<App> apps)
         {
-            OutputApps(apps, "Введите номер приложения, логин которого нужно изменить.");
+            while(true)
+            {
+                OutputApps(apps, "Введите номер приложения, логин которого нужно изменить.");
 
-            int option = int.Parse(Console.ReadLine());
-            Console.WriteLine($"Введите новый логин для {apps[option - 1].AppName}.");
-            string newLogin = Console.ReadLine();
+                if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= apps.Count)
+                {
+                    Console.WriteLine($"Введите новый логин для {apps[indexSelectedOption - 1].AppName}.");
+                    string newLogin = Console.ReadLine();
 
-            apps[option - 1] = new App(apps[option - 1].AppName, newLogin, apps[option - 1].Password);
+                    apps[indexSelectedOption - 1] = new App(apps[indexSelectedOption - 1].AppName, newLogin, apps[indexSelectedOption - 1].Password);
 
-            Clipboard.SetText(apps[option - 1].Login);
-            App.Save(Program.saveFileName, apps);
+                    Clipboard.SetText(apps[indexSelectedOption - 1].Login);
+                    App.Save(Program.saveFileName, apps);
+
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Данной опции не существует.");
+                    Console.ReadKey();
+                }
+            }
         }
 
         private void ChangePassword(List<App> apps)
         {
-            OutputApps(apps, "Введите номер приложения, пароль которого нужно изменить.");
+            while (true)
+            {
+                OutputApps(apps, "Введите номер приложения, пароль которого нужно изменить.");
 
-            int option = int.Parse(Console.ReadLine());
-            Console.WriteLine($"Введите новый пароль для {apps[option - 1].AppName}.");
-            string newPassword = Console.ReadLine();
+                if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= apps.Count)
+                {
+                    Console.WriteLine($"Введите новый пароль для {apps[indexSelectedOption - 1].AppName}.");
+                    string newPassword = Console.ReadLine();
 
-            apps[option - 1] = new App(apps[option - 1].AppName, apps[option - 1].Login, newPassword);
+                    apps[indexSelectedOption - 1] = new App(apps[indexSelectedOption - 1].AppName, apps[indexSelectedOption - 1].Login, newPassword);
 
-            Clipboard.SetText(apps[option - 1].Password);
-            App.Save(Program.saveFileName, apps);
+                    Clipboard.SetText(apps[indexSelectedOption - 1].Password);
+                    App.Save(Program.saveFileName, apps);
+
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Данной опции не существует.");
+                    Console.ReadKey();
+                }
+            }
         }
 
         private void AddNewApp(List<App> apps)
@@ -112,7 +162,6 @@ namespace PasswordHelper.Menus
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                int option;
                 while(true)
                 {
                     Console.Clear();
@@ -120,9 +169,7 @@ namespace PasswordHelper.Menus
                     Console.WriteLine("1. Да");
                     Console.WriteLine("2. Нет");
 
-                    option = int.Parse(Console.ReadLine());
-
-                    if (option == 1)
+                    if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption == 1)
                     {
                         StreamReader sr = new StreamReader(openFileDialog.FileName);
                         StreamWriter sw = new StreamWriter(new FileStream(Program.saveFileName, FileMode.OpenOrCreate));
@@ -131,11 +178,11 @@ namespace PasswordHelper.Menus
                         sr.Close();
                         sw.Close();
 
+                        Program.apps = App.Load(Program.saveFileName);
+
                         break;
                     }
-                    else if (option == 2) break;
-
-                    Program.apps = App.Load(Program.saveFileName);
+                    else if (indexSelectedOption == 2) break;
                 }
             }
         }
