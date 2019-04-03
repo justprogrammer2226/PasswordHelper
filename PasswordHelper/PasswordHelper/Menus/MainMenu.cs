@@ -7,8 +7,11 @@ namespace PasswordHelper.Menus
 {
     internal class MainMenu : IMenu
     {
+        /// <summary> Заголовок меню. </summary>
+        /// <remarks> Заголовок меню будет отображаться при показе меню. </remarks>
         public string Title { get; }
 
+        /// <summary> Список опций меню. </summary>
         public List<Option> Options { get; }
 
         public MainMenu(string title = null)
@@ -29,6 +32,7 @@ namespace PasswordHelper.Menus
             };
         }
 
+        /// <summary> Показывает меню. </summary>
         public void Show()
         {
             Console.Clear();
@@ -49,6 +53,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню копирования логинов. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void CopyLogin(List<App> apps)
         {
             while(true)
@@ -68,6 +74,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню копирования паролей. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void CopyPassword(List<App> apps)
         {
             while (true)
@@ -87,6 +95,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню изменения логинов. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void ChangeLogin(List<App> apps)
         {
             while(true)
@@ -113,6 +123,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню изменения паролей. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void ChangePassword(List<App> apps)
         {
             while (true)
@@ -139,6 +151,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню добавления новых приложений. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void AddNewApp(List<App> apps)
         {
             Console.Clear();
@@ -156,6 +170,8 @@ namespace PasswordHelper.Menus
             App.Save(Program.saveFileName, apps);
         }
 
+        /// <summary> Показывает меню удаления приложений. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void DeleteApp(List<App> apps)
         {
             while (true)
@@ -189,6 +205,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню импорта приложений. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void ImportApps(List<App> apps)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -221,6 +239,8 @@ namespace PasswordHelper.Menus
             }
         }
 
+        /// <summary> Показывает меню експорта приложений. </summary>
+        /// <param name="apps"> Список приложений. </param>
         private void ExportApps(List<App> apps)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -230,6 +250,9 @@ namespace PasswordHelper.Menus
                 App.Save(openFileDialog.FileName, apps);
         }
 
+        /// <summary> Выводит список приложений. </summary>
+        /// <param name="apps"> Список приложений. </param>
+        /// <param name="title"> Заголовок выводиться сверху вывода приложений. </param>
         private void OutputApps(List<App> apps, string title = null)
         {
             Console.Clear();

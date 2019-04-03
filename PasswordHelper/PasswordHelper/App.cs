@@ -16,6 +16,9 @@ namespace PasswordHelper
             Password = password;
         }
 
+        /// <summary> Сохраняет список приложений по указаному путю. </summary>
+        /// <param name="path"> Путь к файлу, куда нужно сохранить список приложений. </param>
+        /// <param name="apps"> Список приложений, которые нужно сохранить. </param>
         public static void Save(string path, List<App> apps)
         {
             FileStream fs = new FileStream(path, FileMode.OpenOrCreate);
@@ -25,8 +28,12 @@ namespace PasswordHelper
                 writer.WriteLine($"{apps[i].AppName}-{apps[i].Login}-{apps[i].Password}");
 
             writer.Close();
+            fs.Close();
         }
 
+        /// <summary> Загружает список приложений, по указаному путю. </summary>
+        /// <param name="path"> Путь к файлу, откуда нужно загрузить список приложений. </param>
+        /// <returns> Список приложений, загруженых с файла. </returns>
         public static List<App> Load(string path)
         {
             List<App> apps = new List<App>();
